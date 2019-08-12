@@ -1,0 +1,15 @@
+---
+- hosts: all
+  vars:
+    user: teste2
+    passhash: $6$Bsjo4ZKX$4ZTazbQq5SEFXFhngwz3P3qqwyW3IpxdPO5vQb7qqiZqXDLBGdKFjSN09oR0Uu2l5ULVBNIv3rNIr.QL/wvVo1
+
+  tasks:
+    - name: check if user is local
+      shell: grep "{{ user|quote }}" {/etc/passwd,/etc/shadow}
+      register: result
+
+    - user:
+        name: "{{ user|quote }}"
+        password: "{{ passhash }}"
+      when: result is succeeded
